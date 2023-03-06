@@ -15,7 +15,7 @@ void set_imghead()
     img_config_setzone(&imgznp->fhdsc_zn, 0x2000, 0x2000, 0x2000 + fhdblksz - 1);
 
     uint_t filesz = ret_allinfilesz();
-    img_config_setzone(&imgznp->file_zn, 0x2000 + fhdblksz, 0x2000 + fhdblksz, 0x2000 + fhdblksz + filesz);
+    img_config_setzone(&imgznp->file_zn, 0x2000 + fhdblksz, 0x2000 + fhdblksz, 0x2000 + fhdblksz + filesz - 1);
     return;
 }
 
@@ -360,7 +360,9 @@ int write_one_fhdsc(binfhead_t *bfhp, uint_t soff, uint_t eoff, uint_t fsz, char
     fdscbuf->soff = soff;
     fdscbuf->eoff = eoff;
     fdscbuf->sz = fsz;
-    strcpy(fdscbuf->name, fname);
+
+    // 删除文件名中的路径, 只保留文件名, 因为后面在OS的加载时查找文件只查找文件名
+    strcpy(fdscbuf->name, tk_ret_fnameonly(fname));
 
     set_fhdsc_currpos(bfhp);
     ssize_t sz = tk_writefile((int)bfhp->bfh_fd, (void *)fdscbuf, (size_t)sizeof(fhdsc_t));

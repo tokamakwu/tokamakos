@@ -135,19 +135,29 @@ uint_t ret_infilenr()
     return (cmd_param.inf_enr - cmd_param.inf_snr) + 1;
 }
 
+// 返回所有 -f 参数的文件的所有大小
 uint_t ret_allinfilesz()
 {
     uint_t total_sz = 0, fsz = 0;
     uint_t i = cmd_param.inf_snr, j = cmd_param.inf_enr;
-    if (i == 0 || i < j) // 没有输入文件或输入文件非法, 直接返回0
+    if (i == 0 || i > j) // 没有输入文件或输入文件非法, 直接返回0
+    {
+        img_error("no input file");
         return 0;
+    }
 
-    for (; i < j; i++)
+    for (; i <= j; i++)
     {
         fsz = tk_ret_filesz(cmd_param.argv[i]);
         if (fsz == 0) // 只要有一个文件的大小=0, 就直接返回0
+        {
+            img_error("get file size empty");
             return 0;
-        total_sz += fsz;
+        }
+        // 需要将大小调整为4k对齐. #TODO: why
+        // 初步分析原因: 为了方便将各个文件写入, 每次读取时都是按4k大小来读取的
+        // 这样就每个文件的开始一定是从4k对齐处开始
+        total_sz += BLK_ALIGN(fsz);
     }
     return total_sz;
 }

@@ -51,3 +51,41 @@ sint_t tk_retfcurpos(int fd)
     }
     return (sint_t)retf;
 }
+
+char *tk_ret_fnameonly(char *pathname)
+{
+    // strlen 返回的值不包含末尾的\0
+    int slen = strlen(pathname);
+    if (slen + 1 > FHDSC_NMAX)
+    {
+        img_error("File Name too long");
+    }
+
+    char *retname = malloc(slen + 1);
+    if (retname == NULL)
+    {
+        img_error("alloc name buffer error");
+    }
+    memset(retname, 0, slen + 1);
+
+    int i = 0, j = slen;
+    for (; j >= 0; j--)
+    {
+        if (pathname[j] == '/') // 从后往前找, 找到第一个/就停止
+        {
+            break;
+        }
+        retname[i++] = pathname[j];
+    }
+
+    // 此时的i就表示文件名后面的 \0 位置
+    retname[i] = '\0';
+    for (j = i - 1, i = 0; i < j; i++, j--) // 字符串反转
+    {
+        // 交换两个位置的值
+        retname[i] = retname[i] ^ retname[j];
+        retname[j] = retname[i] ^ retname[j];
+        retname[i] = retname[i] ^ retname[j];
+    }
+    return retname;
+}

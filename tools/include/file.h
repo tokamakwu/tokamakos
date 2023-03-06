@@ -9,5 +9,6 @@ int tk_openfile(const char *pathname, int flags);
 ssize_t tk_readfile(int fd, void *buf, size_t count);
 off_t tk_seekfile(int fd, off_t offset, int whence);
 sint_t tk_retfcurpos(int fd);
+char *tk_ret_fnameonly(char *pathname);
 
 #endif
