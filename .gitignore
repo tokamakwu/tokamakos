@@ -1,0 +1,11 @@
+**/*.o
+**/op.sh
+**/*.eki
+**/rtool
+**/imgtool
+**/lmoskrlimg
+**/*.swp
+tools/**/*.bin
+tools/**/*.bmp
+tools/**/*.fnt
+tools/script/Makefile
