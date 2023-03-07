@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -DDEBUG -g -c -std=c99 -I ../include -Wall
+CFLAGS = -DDEBUG -g -c -O0 -std=c99 -I ../include -Wall
 CBUILD = ../src/
 
 OBJS = main.o param.o imgheader.o file.o mem.o core.o

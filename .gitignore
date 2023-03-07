@@ -4,7 +4,16 @@
 **/rtool
 **/imgtool
 **/lmoskrlimg
+**/lmkfbuild
 **/*.swp
+tokamak/build/*.mk
+tokamak/build/*.mki
+tokamak/build/*.elf
+tokamak/build/*.map
+tokamak/build/*.lds
+tokamak/**/*.bin
+tokamak/initldr/build/*.elf
+tokamak/initldr/build/*.map
 tools/**/*.bin
 tools/**/*.bmp
 tools/**/*.fnt
