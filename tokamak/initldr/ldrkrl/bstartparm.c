@@ -89,7 +89,7 @@ int adrzone_is_ok(u64_t sadr, u64_t slen, u64_t kadr, u64_t klen)
 
 int chkadr_is_ok(machbstart_t *mbsp, u64_t chkadr, u64_t cksz)
 {
-    //u64_t len=chkadr+cksz;
+    // u64_t len=chkadr+cksz;
     if (adrzone_is_ok((mbsp->mb_krlinitstack - mbsp->mb_krlitstacksz), mbsp->mb_krlitstacksz, chkadr, cksz) != 0)
     {
         return -1;
