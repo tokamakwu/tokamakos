@@ -1,34 +1,35 @@
 ###################################################################
 #		krnlbuidrule自动化编译配置文件 Makefile		  #
-#				彭东 
 ###################################################################
 
-CCSTR		= 	'CC -[M] 正在构建... '$<
-PRINTCSTR 	=	@echo $(CCSTR) 
-
 %.krnl : $(CCBUILDPATH)%.c
+[@echo "gen .krnl by .c CMD: $(CC) $(CFLAGS) -o $@ $<"
 [$(CC) $(CFLAGS) -o $@ $<
-[$(PRINTCSTR)
+
 %.krnl : $(CCBUILDPATH)%.S
+[@echo "gen .krnl by .S CMD: [$(CC) $(CFLAGS) -o $@ $<"
 [$(CC) $(CFLAGS) -o $@ $<
-[$(PRINTCSTR)
+
 %.o : $(CCBUILDPATH)%.asm
+[@echo "gen .o by .asm CMD: [$(ASM) $(ASMFLGS) -o $@ $<"
 [$(ASM) $(ASMFLGS) -o $@ $<
-[$(PRINTCSTR)
+
 %.o : $(CCBUILDPATH)%.c
+[@echo "gen .o by .c CMD: $(CC) $(CFLAGS) -o $@ $<"
 [$(CC) $(CFLAGS) -o $@ $<
-[$(PRINTCSTR)
+
 %.o : $(CCBUILDPATH)%.S
+[@echo "gen .o by .S CMD: $(CC) $(CFLAGS) -o $@ $<"
 [$(CC) $(CFLAGS) -o $@ $<
-[$(PRINTCSTR)	
+
 %.lds : $(CCBUILDPATH)%.S
+[@echo "gen .lds by .S CMD: $(CC) $(CPPFLGSLDS) -o $@ $<"
 [$(CC) $(CPPFLGSLDS) -o $@ $<
-[$(PRINTCSTR)
 
 %.mkh : $(CCBUILDPATH)%.S
+[@echo "gen .mkh by .S CMD: $(CC) $(CPPFLGSLDS) -o $@ $<"
 [$(CC) $(CPPFLGSLDS) -o $@ $<
-[$(PRINTCSTR)
 
 %.mk : $(CCBUILDPATH)%.S
+[@echo "gen .mk by .S CMD: $(CC) $(CPPFLGSLDS) -o $@ $<"
 [$(CC) $(CPPFLGSLDS) -o $@ $<
-[$(PRINTCSTR)

@@ -1,6 +1,6 @@
 #include "config.h"
-//#include "platform_t.h"
 #include "buildfile.h"
+
 BUILD_MK_BOOT_OBJS :=
 BUILD_MK_HALY_OBJS :=
 BUILD_MK_KRNL_OBJS :=
