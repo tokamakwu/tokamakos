@@ -4,7 +4,6 @@
 **/rtool
 **/imgtool
 **/lmoskrlimg
-**/lmkfbuild
 **/*.swp
 tokamak/build/*.mk
 tokamak/build/*.mkf
