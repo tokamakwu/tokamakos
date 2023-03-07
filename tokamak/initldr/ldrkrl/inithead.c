@@ -14,6 +14,7 @@ void inithead_entry()
 
 void write_realintsvefile()
 {
+    return;
 }
 
 fhdsc_t *find_file(char_t *fname)
@@ -22,6 +23,7 @@ fhdsc_t *find_file(char_t *fname)
 
 void write_ldrkrlfile()
 {
+    return;
 }
 
 void error(char_t *estr)
