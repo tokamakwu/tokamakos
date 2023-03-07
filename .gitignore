@@ -3,7 +3,6 @@
 **/*.eki
 **/rtool
 **/imgtool
-**/lmoskrlimg
 **/*.swp
 tokamak/build/*.mk
 tokamak/build/*.mkf
@@ -18,3 +17,6 @@ tools/**/*.bin
 tools/**/*.bmp
 tools/**/*.fnt
 tools/script/Makefile
+tools/build/lmoskrlimg
+tokamak/initldr/build/lmoskrlimg
+tools/script/lmoskrlimg
