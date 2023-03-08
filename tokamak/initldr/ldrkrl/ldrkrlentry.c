@@ -4,11 +4,12 @@ extern idtr_t IDT_PTR;
 
 void ldrkrl_entry()
 {
+    // initldr/ldrkrl/vgastr.c 中实现的
     init_curs();
     close_curs();
     clear_screen(VGADP_DFVL);
 
-    init_bstartparm();
+    init_bstartparm(); // bstartparm.c 中x
     return;
 }
 
@@ -22,6 +23,7 @@ void kerror(char_t *kestr)
 
 #pragma GCC push_options
 #pragma GCC optimize("O0")
+
 void die(u32_t dt)
 {
     u32_t dttt = dt, dtt = dt;
@@ -44,4 +46,5 @@ void die(u32_t dt)
 
     return;
 }
+
 #pragma GCC pop_options

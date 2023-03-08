@@ -1,5 +1,6 @@
 #ifndef CMCTL_H
 #define CMCTL_H
+
 #include "type.h"
 #include "ldrtype.h"
 #include "imgmgrhead.h"
@@ -14,4 +15,5 @@
 #include "chkcpmm.h"
 #include "graph.h"
 #include "bstartparm.h"
+
 #endif

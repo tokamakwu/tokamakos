@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
 
     u64_t file_nr = (int)imghdscp->file_nr;
     u64_t fhdsc_sz = imghdscp->fhdsc_sz;
+    printf("file end offset: %lx\n", imghdscp->file_eoff);
 
     tk_memclr(buf, 0, BINFH_BUF_SZ); // 复用前面的buf
     if (tk_readfile(fd, buf, (size_t)BINFH_BUF_SZ) == -1)

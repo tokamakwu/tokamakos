@@ -53,12 +53,12 @@ _entry:
 	cli ;; 关软中断
 
 	;; 关闭不可屏蔽中断(硬件中断)
-	int al, 0x70
+	in al, 0x70
 	or al, 0x80
 	out 0x70, al
 
 	lgdt [GDT_PTR]
-	jmp 0x80: _32bit_mode
+	jmp dword 0x8:_32bit_mode
 
 _32bit_mode:
 	mov ax, 0x10 ;; 数据段选择子
@@ -82,11 +82,21 @@ _32bit_mode:
 	jmp 0x200000
 
 GDT_START:
+	;; 保护模式描述符
 	knull dq 0
-	kcode dq 0x00cf9e00000ffff
-	kdata dq 0x00cf92000000fff
-	k16cd dq 0x00009e000000fff
-	k16dt dq 0x000092000000fff
+
+	;; G=1 粒度=4k, D(/B)=1(0:16bit sgement; 1:32bit segment), 
+	;; L=0(IA32模式使用), AVL=0
+	;; P=1, DPL=0, S=1(非系统段); 
+	;Type = 1110(X=1(1: 可执行, 0:data), C=1(非一致性代码), R=1(可读), A=0)
+	;; 1100(c), 1001 1110(9e)
+	kcode dq 0x00cf9e000000ffff
+
+	;; c=1100, 1001(P=1, DPL=0, S=1) 0010(X=0, E=0, W=1, A=0)
+	kdata dq 0x00cf920000000fff
+
+	k16cd dq 0x00009e0000000fff
+	k16dt dq 0x0000920000000fff
 GDT_END:
 
 GDT_PTR:

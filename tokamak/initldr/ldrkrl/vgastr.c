@@ -1,4 +1,5 @@
 #include "cmctl.h"
+
 __attribute__((section(".data"))) cursor_t curs;
 
 void init_curs()
@@ -8,6 +9,29 @@ void init_curs()
     curs.cvmemadr = 0;
     curs.x = 0;
     curs.y = 0;
+    return;
+}
+
+void close_curs()
+{
+    out_u8(VGACTRL_REG_ADR, VGACURS_REG_INX);
+    out_u8(VGACTRL_REG_DAT, VGACURS_CLOSE);
+    return;
+}
+
+void clear_screen(u16_t srrv)
+{
+    curs.x = 0;
+    curs.y = 0;
+
+    u16_t *p = (u16_t *)VGASTR_RAM_BASE;
+
+    for (uint_t i = 0; i < 2001; i++)
+    {
+        p[i] = srrv;
+    }
+
+    close_curs();
     return;
 }
 
@@ -53,7 +77,6 @@ char_t *numberk(char_t *str, uint_t n, sint_t base)
     {
         *--p = '0';
     }
-
     else
     {
         do
@@ -61,6 +84,7 @@ char_t *numberk(char_t *str, uint_t n, sint_t base)
             *--p = "0123456789abcdef"[n % base];
         } while (n /= base);
     }
+
     while (*p != 0)
     {
         *str++ = *p++;
@@ -75,33 +99,10 @@ void set_curs(u32_t x, u32_t y)
     return;
 }
 
-void clear_screen(u16_t srrv)
-{
-    curs.x = 0;
-    curs.y = 0;
-
-    u16_t *p = (u16_t *)VGASTR_RAM_BASE;
-
-    for (uint_t i = 0; i < 2001; i++)
-    {
-        p[i] = srrv;
-    }
-
-    close_curs();
-    return;
-}
-
 void put_one_char(char_t cr, uint_t x, uint_t y)
 {
     char_t *p_strdst = (char_t *)(VGASTR_RAM_BASE + (x + (y * 80 * 2)));
     *p_strdst = cr;
-    return;
-}
-
-void close_curs()
-{
-    out_u8(VGACTRL_REG_ADR, VGACURS_REG_INX);
-    out_u8(VGACTRL_REG_DAT, VGACURS_CLOSE);
     return;
 }
 
@@ -127,6 +128,7 @@ void vsprintfk(char_t *buf, const char_t *fmt, va_list_t args)
             *p++ = *fmt++;
             continue;
         }
+
         fmt++;
         switch (*fmt)
         {

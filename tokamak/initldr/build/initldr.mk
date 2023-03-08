@@ -9,7 +9,9 @@ CCBUILDPATH	= $(KRNLBOOT_PATH)
 
 ASMBFLAGS = -I $(HEADFILE_PATH) -f elf
 # 为了方便调试 将 -Os 改为 -O0, 并增加 -g
-BTCFLAGS = -I $(HEADFILE_PATH) -c -O2 -g -std=c99 -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -fno-ident -ffreestanding  -fno-stack-protector -fomit-frame-pointer -Wno-unused-parameter -Wunused-variable
+# TODO: -DACPI_CHECK 非 Qemu 可以定义该宏
+# TK_DEBUG 是自定义的一个用于显示调试信息的宏
+BTCFLAGS = -DTK_DEBUG -I $(HEADFILE_PATH) -c -O2 -g -std=c99 -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -fno-ident -ffreestanding  -fno-stack-protector -fomit-frame-pointer -Wno-unused-parameter -Wunused-variable
 
 include ldrobjs.mh
 

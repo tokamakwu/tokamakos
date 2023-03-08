@@ -1,14 +1,12 @@
 /**********************************************************
-		转换显示字符串头文件vgastr.h
-***********************************************************
-				彭东
+        转换显示字符串头文件vgastr.h
 **********************************************************/
 
 #ifndef _VGASTR_T_H
 #define _VGASTR_T_H
 
 #define VGASTR_RAM_BASE (0xb8000)
-#define VGASTR_RAM_END  (0xbffff)
+#define VGASTR_RAM_END (0xbffff)
 #define VGADP_DFVL 0x0700
 #define VGADP_HLVL 0x0f00
 #define VGACTRL_REG_ADR 0x3d4
@@ -25,10 +23,9 @@ typedef struct s_CURSOR
     uint_t vmem_s;
     uint_t vmem_e;
     uint_t cvmemadr;
-	
+
     uint_t x;
     uint_t y;
-}cursor_t; 
+} cursor_t;
 
 #endif
-
