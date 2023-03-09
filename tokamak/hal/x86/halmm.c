@@ -200,6 +200,7 @@ void init_halmm()
     init_phymmarge();
 
     // 内存管理器初始化
-    // init_memmgr();
+    // hal层的内存初始化函数
+    init_memmgr(); // memmgrinit.c
     return;
 }

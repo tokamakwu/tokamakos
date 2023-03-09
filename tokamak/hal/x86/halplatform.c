@@ -45,6 +45,16 @@ adr_t phyadr_to_viradr(adr_t kphyadr)
     return kphyadr + KRNL_MAP_VIRTADDRESS_START;
 }
 
+adr_t viradr_to_phyadr(adr_t kviradr)
+{
+    if (kviradr < KRNL_MAP_VIRTADDRESS_START || kviradr > KRNL_MAP_VIRTADDRESS_END)
+    {
+        system_error("viradr_to_phyadr err\n");
+        return KRNL_ADDR_ERROR;
+    }
+    return kviradr - KRNL_MAP_VIRTADDRESS_START;
+}
+
 void get_file_rvadrandsz(char_t *fname, machbstart_t *mbsp, u64_t *retadr, u64_t *retsz)
 {
     u64_t padr = 0, fsz = 0;
