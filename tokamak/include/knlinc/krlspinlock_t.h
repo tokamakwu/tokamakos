@@ -1,14 +1,9 @@
 /****************************************************************
-        Cosmos全局类型控制头文件cosmostypes.h
+        kernel自旋锁头文件krlspinlock_t.h
 *****************************************************************
                 彭东
 ****************************************************************/
-#ifndef _COSMOSTYPES_H
-#define _COSMOSTYPES_H
-
-#include "config.h"
-#include "bastype.h"
-#include "haltypes.h"
-#include "krltypes.h"
+#ifndef _KRLSPINLOCK_T_H
+#define _KRLSPINLOCK_T_H
 
 #endif

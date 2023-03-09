@@ -1,7 +1,5 @@
 /****************************************************************
         COSMOS HAL类型头文件haltypes.h
-*****************************************************************
-                彭东
 ****************************************************************/
 #ifndef _HALTYPES_H
 #define _HALTYPES_H
@@ -13,6 +11,7 @@
 #include "halintupt_t.h"
 #include "halmm_t.h"
 #include "halmach_t.h"
+
 #ifdef CFG_X86_PLATFORM
 #include "halgdtidt_t.h"
 #include "pages64_t.h"
@@ -23,7 +22,5 @@
 #include "halglobal_t.h"
 #include "halinit_t.h"
 #include "halprint_t.h"
-
-
 
 #endif // HALTYPES_H

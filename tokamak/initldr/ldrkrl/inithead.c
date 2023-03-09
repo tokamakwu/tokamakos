@@ -41,6 +41,8 @@ fhdsc_t *find_file(char_t *fname)
     s64_t rethn = -1;
     for (u64_t i = 0; i < imghdscp->mdc_fhdnr; i++)
     {
+        // 此处的 strcmpl 只会使用inithead.c 中定义的 strcmpl 函数, 不会用到 fs.c 中的 strcmpl
+        // 原因是 在链接的时候没有用到 fs.o 文件
         if (strcmpl(fname, fhdscp[i].fhd_name) == 0)
         {
             rethn = (s64_t)i;

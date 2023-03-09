@@ -1,14 +1,13 @@
 /**********************************************************
         平台相关的宏定义文件platforms3c2440_t.h
-***********************************************************
-                彭东
 **********************************************************/
 #ifndef _PLATFORM_T_H
 #define _PLATFORM_T_H
+
 #include "bdvideo_t.h"
 
-
 #ifdef CFG_X86_PLATFORM
+
 #define CPUCORE_MAX 1
 #define SDRAM_MAPVECTPHY_ADDR 0x30000000
 
@@ -24,10 +23,9 @@
 #define CPU_VECTOR_PHYADR 0x30000000
 #define CPU_VECTOR_VIRADR 0
 
-
-#define PTE_SECT_AP (3<<10)
-#define PTE_SECT_DOMAIN (0<<5)
-#define PTE_SECT_NOCW (0<<2)
+#define PTE_SECT_AP (3 << 10)
+#define PTE_SECT_DOMAIN (0 << 5)
+#define PTE_SECT_NOCW (0 << 2)
 #define PTE_SECT_BIT (2)
 
 #define PLFM_ADRSPCE_NR 29
@@ -43,11 +41,10 @@
 #define KRNL_MAP_PHYADDRESS_END 0x400000000
 #define KRNL_MAP_PHYADDRESS_SIZE 0x400000000
 #define KRNL_MAP_VIRTADDRESS_START KRNL_VIRTUAL_ADDRESS_START
-#define KRNL_MAP_VIRTADDRESS_END (KRNL_MAP_VIRTADDRESS_START+KRNL_MAP_VIRTADDRESS_SIZE)
+#define KRNL_MAP_VIRTADDRESS_END (KRNL_MAP_VIRTADDRESS_START + KRNL_MAP_VIRTADDRESS_SIZE)
 #define KRNL_ADDR_ERROR 0xf800000000000
 
-
-#define MBS_MIGC (u64_t)((((u64_t)'L')<<56)|(((u64_t)'M')<<48)|(((u64_t)'O')<<40)|(((u64_t)'S')<<32)|(((u64_t)'M')<<24)|(((u64_t)'B')<<16)|(((u64_t)'S')<<8)|((u64_t)'P'))
+#define MBS_MIGC (u64_t)((((u64_t)'L') << 56) | (((u64_t)'M') << 48) | (((u64_t)'O') << 40) | (((u64_t)'S') << 32) | (((u64_t)'M') << 24) | (((u64_t)'B') << 16) | (((u64_t)'S') << 8) | ((u64_t)'P'))
 
 typedef struct s_MRSDP
 {
@@ -60,58 +57,55 @@ typedef struct s_MRSDP
     u64_t rp_xsdtphyadr;
     u8_t rp_echksum;
     u8_t rp_resv[3];
-}__attribute__((packed)) mrsdp_t;
-
+} __attribute__((packed)) mrsdp_t;
 
 typedef struct s_MACHBSTART
 {
-    u64_t   mb_migc;          //LMOSMBSP//0
-    u64_t   mb_chksum;//8
-    u64_t   mb_krlinitstack;//16
-    u64_t   mb_krlitstacksz;//24
-    u64_t   mb_imgpadr;
-    u64_t   mb_imgsz;
-    u64_t   mb_krlimgpadr;
-    u64_t   mb_krlsz;
-    u64_t   mb_krlvec;
-    u64_t   mb_krlrunmode;
-    u64_t   mb_kalldendpadr;
-    u64_t   mb_ksepadrs;
-    u64_t   mb_ksepadre;
-    u64_t   mb_kservadrs;
-    u64_t   mb_kservadre;
-    u64_t   mb_nextwtpadr;
-    u64_t   mb_bfontpadr;
-    u64_t   mb_bfontsz;
-    u64_t   mb_fvrmphyadr;
-    u64_t   mb_fvrmsz;
-    u64_t   mb_cpumode;
-    u64_t   mb_memsz;
-    u64_t   mb_e820padr;
-    u64_t   mb_e820nr;
-    u64_t   mb_e820sz;
-    u64_t   mb_e820expadr;
-    u64_t   mb_e820exnr;
-    u64_t   mb_e820exsz;
-    u64_t   mb_memznpadr;
-    u64_t   mb_memznnr;
-    u64_t   mb_memznsz;
-    u64_t   mb_memznchksum;
-    u64_t   mb_memmappadr;
-    u64_t   mb_memmapnr;
-    u64_t   mb_memmapsz;
-    u64_t   mb_memmapchksum;
-    u64_t   mb_pml4padr;
-    u64_t   mb_subpageslen;
-    u64_t   mb_kpmapphymemsz;
-    u64_t   mb_ebdaphyadr;
+    u64_t mb_migc;         // LMOSMBSP//0
+    u64_t mb_chksum;       // 8
+    u64_t mb_krlinitstack; // 16
+    u64_t mb_krlitstacksz; // 24
+    u64_t mb_imgpadr;
+    u64_t mb_imgsz;
+    u64_t mb_krlimgpadr;
+    u64_t mb_krlsz;
+    u64_t mb_krlvec;
+    u64_t mb_krlrunmode;
+    u64_t mb_kalldendpadr;
+    u64_t mb_ksepadrs;
+    u64_t mb_ksepadre;
+    u64_t mb_kservadrs;
+    u64_t mb_kservadre;
+    u64_t mb_nextwtpadr;
+    u64_t mb_bfontpadr;
+    u64_t mb_bfontsz;
+    u64_t mb_fvrmphyadr;
+    u64_t mb_fvrmsz;
+    u64_t mb_cpumode;
+    u64_t mb_memsz;
+    u64_t mb_e820padr;
+    u64_t mb_e820nr;
+    u64_t mb_e820sz;
+    u64_t mb_e820expadr;
+    u64_t mb_e820exnr;
+    u64_t mb_e820exsz;
+    u64_t mb_memznpadr;
+    u64_t mb_memznnr;
+    u64_t mb_memznsz;
+    u64_t mb_memznchksum;
+    u64_t mb_memmappadr;
+    u64_t mb_memmapnr;
+    u64_t mb_memmapsz;
+    u64_t mb_memmapchksum;
+    u64_t mb_pml4padr;
+    u64_t mb_subpageslen;
+    u64_t mb_kpmapphymemsz;
+    u64_t mb_ebdaphyadr;
     mrsdp_t mb_mrsdp;
     graph_t mb_ghparm;
-}__attribute__((packed)) machbstart_t;
+} __attribute__((packed)) machbstart_t;
 
-
-#define MBSPADR ((machbstart_t*)(0x100000))
-
+#define MBSPADR ((machbstart_t *)(0x100000))
 
 #define BFH_RW_R 1
 #define BFH_RW_W 2
@@ -133,11 +127,12 @@ typedef struct s_MACHBSTART
 #define RAM_ACPIREC 3
 #define RAM_ACPINVS 4
 #define RAM_AREACON 5
-typedef struct s_e820{
-    u64_t saddr;    /* start of memory segment8 */
-    u64_t lsize;    /* size of memory segment8 */
-    u32_t type;    /* type of memory segment 4*/
-}__attribute__((packed)) e820map_t;
+typedef struct s_e820
+{
+    u64_t saddr; /* start of memory segment8 */
+    u64_t lsize; /* size of memory segment8 */
+    u32_t type;  /* type of memory segment 4*/
+} __attribute__((packed)) e820map_t;
 
 typedef struct s_fhdsc
 {
@@ -149,8 +144,8 @@ typedef struct s_fhdsc
     u64_t fhd_intsfend;
     u64_t fhd_frealsz;
     u64_t fhd_fsum;
-    char   fhd_name[FHDSC_NMAX];
-}fhdsc_t;
+    char fhd_name[FHDSC_NMAX];
+} fhdsc_t;
 
 typedef struct s_mlosrddsc
 {
@@ -176,12 +171,8 @@ typedef struct s_mlosrddsc
     u64_t mdc_filnr;
     u64_t mdc_endgic;
     u64_t mdc_rv;
-}mlosrddsc_t;
+} mlosrddsc_t;
 
-
+#endif // CFG_X86_PLATFORM
 
 #endif
-
-
-
-#endif 

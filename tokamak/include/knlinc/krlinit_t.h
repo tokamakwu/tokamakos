@@ -1,14 +1,9 @@
 /****************************************************************
-        Cosmos全局类型控制头文件cosmostypes.h
+        kernel全局初始化头文件krlinit_t.h
 *****************************************************************
                 彭东
 ****************************************************************/
-#ifndef _COSMOSTYPES_H
-#define _COSMOSTYPES_H
+#ifndef _KRLINIT_T_H
+#define _KRLINIT_T_H
 
-#include "config.h"
-#include "bastype.h"
-#include "haltypes.h"
-#include "krltypes.h"
-
-#endif
+#endif // KRLINIT_T_H
