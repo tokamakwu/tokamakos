@@ -6,8 +6,11 @@
 #ifdef CFG_X86_PLATFORM
 
 #define BUILD_HALY_OBJS init_entry.o hal_start.o halinit.o halglobal.o \
-                            halplatform.o bdvideo.o halcpuctrl.o halprint.o
-#define BUILD_KRNL_OBJS
+                            halplatform.o bdvideo.o halcpuctrl.o       \
+                                halprint.o halmm.o halgdtidt.o         \
+                                    halintupt.o kernel.o i8259.o
+
+#define BUILD_KRNL_OBJS krlinit.o
 #define BUILD_MEMY_OBJS
 #define BUILD_FSYS_OBJS
 #define BUILD_DRIV_OBJS

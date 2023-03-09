@@ -320,14 +320,17 @@ void get_vbemodeinfo(machbstart_t *mbsp)
     {
         kerror("vomif->BitsPerPixel!=32");
     }
+
     if (x != 1024 || y != 768)
     {
         kerror("xy not");
     }
+
     if ((u32_t)phybass < 0x100000)
     {
         kerror("phybass not");
     }
+
     mbsp->mb_ghparm.gh_x = vomif->XResolution;
     mbsp->mb_ghparm.gh_y = vomif->YResolution;
     mbsp->mb_ghparm.gh_framphyadr = vomif->PhysBasePtr;

@@ -1,6 +1,5 @@
 extern syscalls_table
 
-
 extern hal_hwint_allocator
 extern hal_fault_allocator
 extern hal_syscl_allocator
@@ -59,6 +58,7 @@ global  hxi_apic_lint1
 global  hxi_apic_error
 global	exi_sys_call
 global  asm_ret_from_user_mode
+
 %define	INT_VECTOR_IRQ0			0x20
 %define	INT_VECTOR_IRQ8			0x28
 %define INT_VECTOR_APIC_IPI_SCHEDUL 0xe0
@@ -73,7 +73,10 @@ global  asm_ret_from_user_mode
 %define _KERNEL_DS 0x10
 %define _NOERRO_CODE 0xffffffffffffffff
 
+;; 定义宏 (nasm 编译器)
+;; 格式是: %macro 宏名字 参数个数
 
+;;// 保存中断后的寄存器
 %macro	SAVEALL	0
 
 	push rax
@@ -111,7 +114,7 @@ global  asm_ret_from_user_mode
 	
 %endmacro
 
-
+;;// 恢复中断后寄存器
 %macro	RESTOREALL	0
    	;pop	gs
 	;pop	fs
@@ -126,7 +129,6 @@ global  asm_ret_from_user_mode
 	pop r14
 	mov ds,r14w
 	 
-	
 	pop r15
 	pop r14
 	pop r13
@@ -147,6 +149,7 @@ global  asm_ret_from_user_mode
 	iretq
 %endmacro
 
+;;// 保存异常下的寄存器
 %macro	SAVEALLFAULT 0
 	push rax
 	push rbx
@@ -181,6 +184,7 @@ global  asm_ret_from_user_mode
 	
 %endmacro
 
+;;// 恢复异常下寄存器
 %macro	RESTOREALLFAULT	0
    	;pop	gs
 	;pop	fs
@@ -217,6 +221,8 @@ global  asm_ret_from_user_mode
 	iretq
 %endmacro
 
+;;// 没有错误码CPU异常
+;;// 为了统一, 对没有异常码的手动压入一个常数, 维持栈的平衡
 %macro	SRFTFAULT 1
 	push	  _NOERRO_CODE
 	SAVEALLFAULT
@@ -226,12 +232,13 @@ global  asm_ret_from_user_mode
 	mov fs,r14w
 	mov gs,r14w
 
-	mov 	rdi,%1 ;rdi, rsi
-	mov 	rsi,rsp
+	mov 	rdi, %1 ;rdi, rsi
+	mov 	rsi, rsp
 	call 	hal_fault_allocator
 	RESTOREALLFAULT
 %endmacro
 
+;;// CPU异常
 %macro	SRFTFAULT_ECODE 1
 	SAVEALLFAULT
 	mov r14w,0x10
@@ -246,7 +253,7 @@ global  asm_ret_from_user_mode
 	RESTOREALLFAULT
 %endmacro
 
-
+;;// 硬件中断
 %macro	HARWINT	1
 	SAVEALL
 	
@@ -262,7 +269,6 @@ global  asm_ret_from_user_mode
 
 	RESTOREALL
 %endmacro
-
 
 
 %macro  EXI_SCALL  0

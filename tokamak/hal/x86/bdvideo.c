@@ -38,7 +38,10 @@ PUBLIC LKINIT void init_dftgraph()
     dftgraph_t *kghp = &kdftgh;
     machbstart_t *kmbsp = &kmachbsp;
     memset(kghp, 0, sizeof(dftgraph_t));
+
+    // 显示模式会在 initldr 中设置好
     kghp->gh_mode = kmbsp->mb_ghparm.gh_mode;
+
     kghp->gh_x = kmbsp->mb_ghparm.gh_x;
     kghp->gh_y = kmbsp->mb_ghparm.gh_y;
     kghp->gh_framphyadr = phyadr_to_viradr((adr_t)kmbsp->mb_ghparm.gh_framphyadr);
@@ -587,6 +590,7 @@ void bga_flush(void *ghpdev)
         d[j] = s[j];
         j++;
     }
+
     bga_disp_nxtbank(kghp);
     return;
 }
@@ -831,8 +835,10 @@ void bga_disp_nxtbank(void *ghpdev)
     dftgraph_t *kghp = (dftgraph_t *)ghpdev;
     u16_t h = (u16_t)(kghp->gh_y * kghp->gh_nextbnk + 1);
     u16_t ofy = (u16_t)(kghp->gh_y * (kghp->gh_nextbnk));
+
     bga_write_reg(VBE_DISPI_INDEX_VIRT_HEIGHT, h);
     bga_write_reg(VBE_DISPI_INDEX_Y_OFFSET, ofy);
+
     kghp->gh_curdipbnk = kghp->gh_nextbnk;
     kghp->gh_nextbnk++;
     if (kghp->gh_nextbnk > kghp->gh_bank)

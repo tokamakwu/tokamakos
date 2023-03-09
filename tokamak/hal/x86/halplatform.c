@@ -27,7 +27,7 @@ void init_machbstart()
     machbstart_t_init(kmbsp);
 
     // 复制一份数据到内核中, 要把地址转换成虚拟地址
-    // TODO: 没有搞明白
+    // TODO: 虚拟地址没有搞明白? 进入内核前已经开启了长模式和分页管理
     memcopy((void *)phyadr_to_viradr((adr_t)smbsp),
             (void *)kmbsp, sizeof(machbstart_t));
     return;
@@ -108,6 +108,63 @@ ok:
         system_error("not find file");
     }
     return &fhdscstart[rethn];
+}
+
+// 检查两段内存是否有重叠
+int adrzone_is_ok(u64_t sadr, u64_t slen, u64_t kadr, u64_t klen)
+{
+    if (kadr >= sadr && kadr <= (sadr + slen))
+    {
+        return -1;
+    }
+
+    if (kadr <= sadr && ((kadr + klen) >= sadr))
+    {
+        return -2;
+    }
+
+    return 0;
+}
+int initchkadr_is_ok(machbstart_t *mbsp, u64_t chkadr, u64_t cksz)
+{
+    // u64_t len=chkadr+cksz;
+    if (adrzone_is_ok((mbsp->mb_krlinitstack - mbsp->mb_krlitstacksz), mbsp->mb_krlitstacksz, chkadr, cksz) != 0)
+    {
+        return -1;
+    }
+    if (adrzone_is_ok(mbsp->mb_imgpadr, mbsp->mb_imgsz, chkadr, cksz) != 0)
+    {
+        return -2;
+    }
+    if (adrzone_is_ok(mbsp->mb_krlimgpadr, mbsp->mb_krlsz, chkadr, cksz) != 0)
+    {
+        return -3;
+    }
+    if (adrzone_is_ok(mbsp->mb_bfontpadr, mbsp->mb_bfontsz, chkadr, cksz) != 0)
+    {
+        return -4;
+    }
+    if (adrzone_is_ok(mbsp->mb_e820padr, mbsp->mb_e820sz, chkadr, cksz) != 0)
+    {
+        return -5;
+    }
+    if (adrzone_is_ok(mbsp->mb_memznpadr, mbsp->mb_memznsz, chkadr, cksz) != 0)
+    {
+        return -6;
+    }
+    if (adrzone_is_ok(mbsp->mb_memmappadr, mbsp->mb_memmapsz, chkadr, cksz) != 0)
+    {
+        return -7;
+    }
+    if (adrzone_is_ok(mbsp->mb_e820expadr, mbsp->mb_e820exsz, chkadr, cksz) != 0)
+    {
+        return -8;
+    }
+    if ((chkadr + cksz) >= mbsp->mb_kpmapphymemsz)
+    {
+        return -9;
+    }
+    return 0;
 }
 
 #pragma GCC push_options
