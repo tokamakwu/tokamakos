@@ -5,6 +5,8 @@
 **/imgtool
 **/*.swp
 tokamak/build/*.mk
+tokamak/build/*.i
+tokamak/build/*.s
 tokamak/build/*.mkf
 tokamak/build/*.mki
 tokamak/build/*.elf
