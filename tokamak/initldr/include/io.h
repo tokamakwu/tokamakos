@@ -4,13 +4,14 @@
 
 #ifndef _IO_H
 #define _IO_H
+
 KLINE void out_u8(const u16_t port, const u8_t val)
 {
-
     __asm__ __volatile__(
         "outb  %1, %0\n"
         :
         : "dN"(port), "a"(val));
+        // d: 使用 dx 寄存器, N 表示 0~255之间的立即数
 }
 
 KLINE u8_t in_u8(const u16_t port)
@@ -25,7 +26,6 @@ KLINE u8_t in_u8(const u16_t port)
 
 KLINE void out_u16(const u16_t port, const u16_t val)
 {
-
     __asm__ __volatile__(
         "outw  %1, %0\n"
         :
@@ -35,7 +35,6 @@ KLINE void out_u16(const u16_t port, const u16_t val)
 KLINE u16_t in_u16(const u16_t port)
 {
     u16_t tmp;
-
     __asm__ __volatile__(
         "inw %1, %0\n"
         : "=a"(tmp)

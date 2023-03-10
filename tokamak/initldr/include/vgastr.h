@@ -13,9 +13,10 @@ void clear_screen(u16_t srrv);
 void put_one_char(char_t cr, uint_t x, uint_t y);
 void close_curs();
 void vsprintfk(char_t *buf, const char_t *fmt, va_list_t args);
-void kprint(const char_t *fmt, ...);
+cursor_t* kprint(const char_t *fmt, ...);
 
-KLINE void current_curs(cursor_t *cp, u32_t c_flg)
+// Cosmos code, x 坐标每次 +2
+KLINE void current_cursv2(cursor_t *cp, u32_t c_flg)
 {
 	if (c_flg == VGACHAR_LR_CFLG)
 	{
@@ -29,6 +30,7 @@ KLINE void current_curs(cursor_t *cp, u32_t c_flg)
 
 		return;
 	}
+
 	if (c_flg == VGACHAR_DF_CFLG)
 	{
 		cp->x += 2;
@@ -46,4 +48,39 @@ KLINE void current_curs(cursor_t *cp, u32_t c_flg)
 	}
 	return;
 }
+
+// Tokmak x坐标每次 +1
+KLINE void current_curs(cursor_t *cp, u32_t c_flg)
+{
+	if (c_flg == VGACHAR_LR_CFLG)
+	{
+		cp->y++;
+		cp->x = 0;
+		if (cp->y > 24)
+		{
+			cp->y = 0;
+			clear_screen(VGADP_DFVL);
+		}
+
+		return;
+	}
+
+	if (c_flg == VGACHAR_DF_CFLG)
+	{
+		cp->x++;
+		if (cp->x > 79) // 超过80个字符, 就需要换行
+		{
+			cp->x = 0;
+			cp->y++;
+			if (cp->y > 24)
+			{
+				cp->y = 0;
+				clear_screen(VGADP_DFVL);
+			}
+			return;
+		}
+	}
+	return;
+}
+
 #endif

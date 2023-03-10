@@ -4,7 +4,12 @@ void inithead_entry()
 {
     init_curs();
     close_curs();
-    clear_screen(VGADP_DFVL);
+    clear_screen(VGADP_DFVL); // 0x0700
+
+    // 此时还处于字符模式下, 屏幕规格是: 80(列, x 坐标) * 25(行, y坐标)
+    char_t buf[] = "loading Tokamak...";
+    cursor_t *curp = kprint(buf);
+    kprint("cur x=%d, cur y=%d\n", curp->x, curp->y);
 
     write_realintsvefile();
     write_ldrkrlfile();
