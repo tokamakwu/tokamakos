@@ -33,6 +33,7 @@ _32bit_mode:
     xor esp, esp
     mov esp, 0x90000
     
+    ;; 调用C函数
     call ldrkrl_entry
 
     ;; 0x2000000 存放的是内核代码

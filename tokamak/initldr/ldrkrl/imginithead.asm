@@ -79,7 +79,6 @@ _32bit_mode:
 
 	mov esp, 0x7c00
 	call inithead_entry
-	jmp $
 	jmp 0x200000
 
 GDT_START:

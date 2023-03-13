@@ -112,28 +112,45 @@ typedef struct s_GRAPH
     vbeominfo_t gh_vminfo;
 } __attribute__((packed)) graph_t;
 
+// bitmap head
 typedef struct s_BMFHEAD
 {
-    u16_t bf_tag; // 0x4d42
-    u32_t bf_size;
-    u16_t bf_resd1;
-    u16_t bf_resd2;
-    u32_t bf_off;
+    u16_t bf_tag;   // 文件的类型, 必须是: 0x4d42, 即字符 BM
+    u32_t bf_size;  // 文件的大小, 字节
+    u16_t bf_resd1; // 保留, 设置为0
+    u16_t bf_resd2; // 保留, 设置为0
+    u32_t bf_off;   // 从文件头开始到实际的图像数据之间的字节的偏移量,
+    // 这个参数非常有用, 因为位图信息头和调色板的长度会根据不同情况而变化,
+    // 所以可以用这个偏移值迅速的从文件中读取到位数据
 } __attribute__((packed)) bmfhead_t;
 
 typedef struct s_BITMINFO
 {
-    u32_t bi_size;
-    s32_t bi_w;
+    u32_t bi_size; // 本结构体的大小
+    s32_t bi_w;    // 图像的宽度, 像素
+
+    // 图像的高度(像素), 还有另一个用处: 指明该图像是倒向的位图, 还是正向的
+    // 位图. 如果该值是一个正数, 说明图像是倒向的, 如果该值是一个负数, 则
+    // 说明图像是正向的. 大多数的BMP文件都是倒向的位图, 即: 高度值是一个正数
+    // 当高度值是一个负数时(正向图像), 图像将不能被压缩(即: biCompression
+    // 成员将不能是BI_RLE8或BI_RLE4)
     s32_t bi_h;
-    u16_t bi_planes;
-    u16_t bi_bcount;
+    u16_t bi_planes; // 为目标设备说明位面数, 其值将总是被设为1
+    u16_t bi_bcount; // 说明比特数/像素, 其值为1、4、8、16、24、32
+
+    /*
+    图像数据压缩的类型, 其值可以是下述值之一:
+    BI_RGB: 没有压缩;
+    BI_RLE8: 每个像素8比特的RLE压缩编码, 压缩格式由2字节组成(重复像素计数和颜色索引);
+    BI_RLE4: 每个像素4比特的RLE压缩编码, 压缩格式由2字节组成
+    BI_BITFIELDS: 每个像素的比特由指定的掩码决定
+    */
     u32_t bi_comp;
-    u32_t bi_szimg;
-    s32_t bi_xpelsper;
-    s32_t bi_ypelsper;
-    u32_t bi_clruserd;
-    u32_t bi_clrimport;
+    u32_t bi_szimg;     // 图像的大小, 以字节为单位. 当用BI_RGB格式时, 可设置为0
+    s32_t bi_xpelsper;  // 水平分辨率, 用像素/米表示
+    s32_t bi_ypelsper;  // 垂直分辨率, 用像素/米表示
+    u32_t bi_clruserd;  // 位图实际使用的彩色表中的颜色索引数(设为0的话,则说明使用所有调色板项)
+    u32_t bi_clrimport; // 对图像显示有重要影响的颜色索引的数目, 如果是0, 表示都重要
 } __attribute__((packed)) bitminfo_t;
 
 typedef struct s_BMDBGR

@@ -59,7 +59,7 @@ KLINE void current_curs(cursor_t *cp, u32_t c_flg)
 		if (cp->y > 24)
 		{
 			cp->y = 0;
-			clear_screen(VGADP_DFVL);
+			clear_screen(VGADP_DFVL); //0x700
 		}
 
 		return;

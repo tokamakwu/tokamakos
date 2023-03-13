@@ -27,16 +27,20 @@ void bmp_print(void *bmfile, machbstart_t *mbsp)
 
     pixl_t pix = 0;
     bmdbgr_t *bpixp = NULL;
+    // bmp 文件格式: 最开始是 bmfhead_t, 接着是 bitminfo_t, 其他, 图像信息
     bmfhead_t *bmphdp = (bmfhead_t *)bmfile;
     bitminfo_t *binfp = (bitminfo_t *)(bmphdp + 1);
-    u32_t img = (u32_t)bmfile + bmphdp->bf_off;
+    u32_t img = (u32_t)bmfile + bmphdp->bf_off; // 图像信息开始地址
     bpixp = (bmdbgr_t *)img;
     int l = 0;
     int k = 0;
+    // TODO: 为什么这么计算: (宽 * 24 + 31) / 8 取整数部分
     int ilinebc = (((binfp->bi_w * 24) + 31) >> 5) << 2;
+    // 循环为什么从 639开始, y 循环 510 次
     for (int y = 639; y >= 129; y--, l++)
     {
         k = 0;
+        // x = 322, 340次?
         for (int x = 322; x < 662; x++)
         {
             pix = BGRA(bpixp[k].bmd_r, bpixp[k].bmd_g, bpixp[k].bmd_b);

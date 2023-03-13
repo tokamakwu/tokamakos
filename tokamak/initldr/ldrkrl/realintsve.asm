@@ -136,10 +136,10 @@ _getvbemode:
     push ax
     push di
 
-    mov di, VBEINFO_ADR
+    mov di, VBEINFO_ADR ;; di=0x6000
     mov ax, 0
-    mov es, ax
-    mov ax, 0x4f00
+    mov es, ax ;; es:di -> buffer for SuperVGA information
+    mov ax, 0x4f00 ;; al=0x0 VESA SuperVGA BIOS (VBE) - GET SuperVGA INFORMATION
     int 0x10
 
     cmp ax, 0x004f
@@ -162,9 +162,9 @@ _getvbeonemodeinfo:
 
     mov di, VBEINFO_ADR
     mov ax, 0
-    mov es, ax
-    mov cx, 0x118
-    mov ax, 0x4f01
+    mov es, ax ;; es:di 256-byte buffer for mode information
+    mov cx, 0x118 ;; CX = SuperVGA video mode
+    mov ax, 0x4f01 ;; al=0x1 VESA SuperVGA BIOS - GET SuperVGA MODE INFORMATION
     int 0x10
 
     cmp ax, 0x004f
@@ -183,10 +183,13 @@ _getvbeonemodeinfo:
 _setvbemode:
     push ax
     push bx
-    mov bx, 0x4118
-    mov ax, 0x4f02
+
+    mov ax, 0x4f02 ;; ah=4f, vbe 的功能入口, al=0x2 子功能号
+    ;mov bx, 0x4118 ;; bx是设置显示模式, D15=0 清空内容
+    mov bx, 0xc118 ;; bx是设置显示模式, D14寻找模式, =0窗口模式; D15=0 清空内容
     int 0x10
-    cmp ax, 0x004f
+
+    cmp ax, 0x004f ;; 调用后的返回值存在 ax 中, ah=0x0表示调用成功, al=4f 子功能被支持
     jz .ok
 
     mov ax, setvbmodeerrmsg

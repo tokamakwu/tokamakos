@@ -123,6 +123,8 @@ void init_mem(machbstart_t *mbsp)
     mbsp->mb_e820padr = (u64_t)((u32_t)(retemp));    // 把e820map_t结构数组的首地址传给mbsp->mb_e820padr
     mbsp->mb_e820nr = (u64_t)retemnr;                // 把e820map_t结构数组元素个数传给mbsp->mb_e820nr
     mbsp->mb_e820sz = retemnr * (sizeof(e820map_t)); // 把e820map_t结构数组大小传给mbsp->mb_e820sz
+
+    // 将BIOS获取的所有的段的大小累加起来
     mbsp->mb_memsz = get_memsize(retemp, retemnr);   // 根据e820map_t结构数据计算内存大小
 
 #ifdef ACPI_CHECK
@@ -155,7 +157,8 @@ void init_chkcpu(machbstart_t *mbsp)
 // #define IKSTACK_SIZE 0x1000
 void init_krlinitstack(machbstart_t *mbsp)
 {
-    // fs.c 中
+    // fs.c 中, move_krlimg() 用于判断给定的内存区域中是否
+    // 与 mbsp 中其他部分占用的内存重叠
     if (1 > move_krlimg(mbsp, (u64_t)(0x8f000), 0x1001))
     {
         kerror("iks_moveimg err");
@@ -166,7 +169,7 @@ void init_krlinitstack(machbstart_t *mbsp)
     return;
 }
 
-// 建立 MMU 页表
+// 建立 MMU 页表: TODO
 void init_bstartpages(machbstart_t *mbsp)
 {
     // KINITPAGE_PHYADR = 0x1000000 16M 地址处

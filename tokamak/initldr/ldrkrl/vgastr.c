@@ -4,8 +4,8 @@ __attribute__((section(".data"))) cursor_t curs;
 
 void init_curs()
 {
-    curs.vmem_s = VGASTR_RAM_BASE;
-    curs.vmem_e = VGASTR_RAM_END;
+    curs.vmem_s = VGASTR_RAM_BASE; // 0xb8000
+    curs.vmem_e = VGASTR_RAM_END;  // 0xbffff
     curs.cvmemadr = 0;
     curs.x = 0;
     curs.y = 0;
@@ -203,7 +203,7 @@ void vsprintfk(char_t *buf, const char_t *fmt, va_list_t args)
     return;
 }
 
-cursor_t* kprint(const char_t *fmt, ...)
+cursor_t *kprint(const char_t *fmt, ...)
 {
     char_t buf[512];
 
