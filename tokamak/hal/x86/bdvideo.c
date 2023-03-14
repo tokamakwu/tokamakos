@@ -91,11 +91,9 @@ void hal_dspversion()
     pixl_t bkpx = set_deffontpx(BGRA(0xff, 0, 0));
     kprint(cosmos_version);
 
-    machbstart_t *mbsp = &kmachbsp;
-    vbeominfo_t *vomif = (vbeominfo_t *)((u64_t)mbsp->mb_ghparm.gh_vmifphyadr);
     kprint("系统处理器工作模式:%d位 系统物理内存大小:%dMB\nBitsPerPixel:0x%x\n",
            (uint_t)kmachbsp.mb_cpumode, (uint_t)(kmachbsp.mb_memsz >> 20),
-           vomif->PhysBasePtr);
+           (uint_t)kmachbsp.mb_ghparm.gh_onepixbits);
     set_deffontpx(bkpx);
     return;
 }
