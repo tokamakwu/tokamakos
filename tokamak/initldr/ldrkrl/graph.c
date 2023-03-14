@@ -70,7 +70,7 @@ void logo(machbstart_t *mbsp)
 
 void init_graph(machbstart_t *mbsp)
 {
-    // 初始化图形数据结构
+    // 初始化图形数据结构, 给 graph_t 结构初始化为0
     graph_t_init(&mbsp->mb_ghparm);
 
     // 获取VBE模式, 通过BIOS中断
@@ -79,6 +79,7 @@ void init_graph(machbstart_t *mbsp)
     {
         // 获取VBE模式, 通过BIOS中断
         get_vbemode(mbsp);
+
         // 获取一个具体VBE模式的信息, 通过BIOS中断
         get_vbemodeinfo(mbsp);
 
@@ -129,6 +130,7 @@ void get_vbemode(machbstart_t *mbsp)
         kerror("vbe is not VESA");
     }
     kprint("vbe vbever:%x\n", vbeinfoptr->vbeversion);
+
     if (vbeinfoptr->vbeversion < 0x0200)
     {
         kerror("vbe version not vbe3");
@@ -176,13 +178,19 @@ void bga_write_reg(u16_t index, u16_t data)
 
 u16_t bga_read_reg(u16_t index)
 {
+    // VBE_DISPI_IOPORT_INDEX = 0x01CE
     out_u16(VBE_DISPI_IOPORT_INDEX, index);
+
+    // VBE_DISPI_IOPORT_DATA = 0x01CF
     return in_u16(VBE_DISPI_IOPORT_DATA);
 }
 
 u32_t get_bgadevice()
 {
+    // VBE_DISPI_INDEX_ID = 0
     u16_t bgaid = bga_read_reg(VBE_DISPI_INDEX_ID);
+    // BGA_DEV_ID0 = 0xB0C0 setting X and Y resolution and bit depth (8 BPP only), banked mode
+    // BGA_DEV_ID5 = 0xB0C5 VRAM increased to 16 MB? [TODO: verify and check for other changes]
     if (BGA_DEV_ID0 <= bgaid && BGA_DEV_ID5 >= bgaid)
     {
         bga_write_reg(VBE_DISPI_INDEX_ID, bgaid);
@@ -320,6 +328,7 @@ void get_vbemodeinfo(machbstart_t *mbsp)
     vbeominfo_t *vomif = (vbeominfo_t *)VBEMINFO_ADR;
     u32_t x = vomif->XResolution, y = vomif->YResolution;
     u32_t *phybass = (u32_t *)(vomif->PhysBasePtr);
+
     if (vomif->BitsPerPixel < 24)
     {
         kerror("vomif->BitsPerPixel!=32");

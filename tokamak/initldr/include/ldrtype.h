@@ -169,7 +169,7 @@ typedef struct s_e820 // 这个结构体是通过BIOS中断进行填充
 
 typedef struct s_VBEINFO
 {
-    char vbesignature[4];
+    char vbesignature[4]; // 参考hardware.org 文件中的说明
     u16_t vbeversion;
     u32_t oemstringptr;
     u32_t capabilities;
@@ -183,7 +183,7 @@ typedef struct s_VBEINFO
     u8_t oemdata[256];
 } __attribute__((packed)) vbeinfo_t;
 
-typedef struct s_VBEOMINFO
+typedef struct s_VBEOMINFO // 参考 hardware.org 的说明
 {
     u16_t ModeAttributes;
     u8_t WinAAttributes;
