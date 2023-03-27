@@ -89,7 +89,7 @@ int move_krlimg(machbstart_t *mbsp, u64_t cpyadr, u64_t cpysz)
 // 设置内核文件
 void init_krlfile(machbstart_t *mbsp)
 {
-    // IMGKRNL_PHYADR = 0x2000000, 将 Cosmos.bin 复制到 0x2000000 处
+    // IMGKRNL_PHYADR = 0x2000000, 将 Cosmos.bin(内核代碼) 复制到 0x2000000 处
     u64_t sz = r_file_to_padr(mbsp, IMGKRNL_PHYADR, "Cosmos.bin");
     if (0 == sz)
     {
@@ -99,7 +99,7 @@ void init_krlfile(machbstart_t *mbsp)
     // 放置完成后更新机器信息结构中的数据
     mbsp->mb_krlimgpadr = IMGKRNL_PHYADR;
     mbsp->mb_krlsz = sz;
-    // mbsp->mb_nextwtpadr始终要保持指向下一段空闲内存的首地址
+    // mbsp->mb_nextwtpadr 始终要保持指向下一段空闲4k内存地址對齊的首地址
     mbsp->mb_nextwtpadr = P4K_ALIGN(mbsp->mb_krlimgpadr + mbsp->mb_krlsz);
     mbsp->mb_kalldendpadr = mbsp->mb_krlimgpadr + mbsp->mb_krlsz;
     return;

@@ -37,7 +37,7 @@ mrsdp_t *acpi_rsdp_isok(mrsdp_t *rdp)
 
 mrsdp_t *findacpi_rsdp_core(void *findstart, u32_t findlen)
 {
-    if (NULL == findstart || 1024 > findlen)
+    if (NULL == findstart || 1024 > findlen) // findlen 必須要 >= 1024
     {
         return NULL;
     }
@@ -47,7 +47,7 @@ mrsdp_t *findacpi_rsdp_core(void *findstart, u32_t findlen)
     mrsdp_t *retdrp = NULL;
     for (u64_t i = 0; i <= findlen; i++)
     {
-        // 'RSD PTR '
+        //判斷前8個字節是否是:RSD PTR 
         if (('R' == tmpdp[i]) && ('S' == tmpdp[i + 1]) && ('D' == tmpdp[i + 2]) && (' ' == tmpdp[i + 3]) &&
             ('P' == tmpdp[i + 4]) && ('T' == tmpdp[i + 5]) && ('R' == tmpdp[i + 6]) && (' ' == tmpdp[i + 7]))
         {
@@ -63,6 +63,7 @@ mrsdp_t *findacpi_rsdp_core(void *findstart, u32_t findlen)
 
 PUBLIC mrsdp_t *find_acpi_rsdp()
 {
+    // 設置 fndp 指向 0x40e0
     void *fndp = (void *)acpi_get_bios_ebda();
     mrsdp_t *rdp = findacpi_rsdp_core(fndp, 1024);
     if (NULL != rdp)
@@ -90,6 +91,7 @@ PUBLIC void init_acpi(machbstart_t *mbsp)
         kerror("Your computer is not support ACPI!!");
     }
 
+    // 將電源管理信息複製到 mbsp 中;
     m2mcopy(rdp, &mbsp->mb_mrsdp, (sint_t)((sizeof(mrsdp_t))));
     if (acpi_rsdp_isok(&mbsp->mb_mrsdp) == NULL)
     {

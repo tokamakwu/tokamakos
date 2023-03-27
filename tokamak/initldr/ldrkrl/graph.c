@@ -36,7 +36,7 @@ void bmp_print(void *bmfile, machbstart_t *mbsp)
     int k = 0;
     // TODO: 为什么这么计算: (宽 * 24 + 31) / 8 取整数部分
     int ilinebc = (((binfp->bi_w * 24) + 31) >> 5) << 2;
-    // 循环为什么从 639开始, y 循环 510 次
+    // TODO: 循环为什么从 639开始, y 循环 510 次; 难道是因为图片是这么大吗
     for (int y = 639; y >= 129; y--, l++)
     {
         k = 0;
@@ -55,7 +55,7 @@ void bmp_print(void *bmfile, machbstart_t *mbsp)
 void logo(machbstart_t *mbsp)
 {
     u32_t retadr = 0, sz = 0;
-    // 在映像文件中获取logo.bmp文件
+    // 在映像文件中获取logo.bmp文件的地址和大小
     get_file_rpadrandsz("logo.bmp", mbsp, &retadr, &sz);
     if (0 == retadr)
     {
@@ -68,6 +68,7 @@ void logo(machbstart_t *mbsp)
     return;
 }
 
+// 初始化圖形信息
 void init_graph(machbstart_t *mbsp)
 {
     // 初始化图形数据结构, 给 graph_t 结构初始化为0
@@ -119,6 +120,7 @@ u32_t vfartolineadr(u32_t vfar)
 void get_vbemode(machbstart_t *mbsp)
 {
     realadr_call_entry(RLINTNR(2), 0, 0);
+    //#define VBEINFO_ADR 0x6000
     vbeinfo_t *vbeinfoptr = (vbeinfo_t *)VBEINFO_ADR;
     u16_t *mnm;
 

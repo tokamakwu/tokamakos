@@ -121,6 +121,7 @@ typedef struct s_MBR
     dpt_t mb_part[4];
     u16_t mb_endmgic;
 } __attribute__((packed)) mbr_t;
+
 typedef struct s_EBR
 {
     char_t eb_byte[446];
@@ -366,6 +367,7 @@ typedef struct s_MRSDP
     u8_t rp_echksum;
     u8_t rp_resv[3];
 } __attribute__((packed)) mrsdp_t;
+
 typedef struct s_MACHBSTART
 {
     u64_t mb_migc;         // LMOSMBSP//0

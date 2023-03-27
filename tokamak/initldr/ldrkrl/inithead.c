@@ -74,6 +74,7 @@ void write_ldrkrlfile()
         error("not found initldrkrl.bin");
     }
 
+    // ILDRKRL_PHYADR 0x200000;  LDRFILEADR 0x4000000;
     m2mcopy((void *)((u32_t)fhdscp->fhd_intsfsoff + LDRFILEADR),
             (void *)ILDRKRL_PHYADR, (sint_t)fhdscp->fhd_frealsz);
     return;

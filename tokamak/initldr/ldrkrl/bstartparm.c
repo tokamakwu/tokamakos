@@ -5,10 +5,10 @@ void init_bstartparm()
     // #define MBSPADR ((machbstart_t *)(0x100000))
     // 即在 1M 地址处初始化了一个机器信息结构 machbstart_t
     machbstart_t *mbsp = MBSPADR;
-    machbstart_t_init(mbsp);
+    machbstart_t_init(mbsp); // 初始化為0, 設置mb_migc 字段
 
-    init_chkcpu(mbsp); // chkcpmm.c, 检查cpu
-    init_mem(mbsp);
+    init_chkcpu(mbsp); // chkcpmm.c, 检查cpu是否支持長模式(支持就設置 mb_cpumode 字段為0x40)
+    init_mem(mbsp); // 通過BIOS中斷獲取内存結構; 還初始化了電源管理;
     if (0 == get_wt_imgfilesz(mbsp)) // fs.c
     {
         kerror("imgfilesz 0");
@@ -18,9 +18,9 @@ void init_bstartparm()
     init_krlfile(mbsp);      // 放置内核文件
     init_defutfont(mbsp);    // 字体文件放在内核文件后
 
-    init_meme820(mbsp);
+    init_meme820(mbsp); // 將BIOS獲取的内存結構信息移動到 mbsp 指定的區域中
     init_bstartpages(mbsp); // 建立 MMU 页表
-    init_graph(mbsp);
+    init_graph(mbsp); // 初始化圖形硬件
 
     return;
 }
