@@ -11,7 +11,7 @@ const char *cosmos_version = "Cosmos\n内核版本:00.01\n彭东 @ 构建于 "__
 
 PUBLIC LKINIT void init_bdvideo()
 {
-    dftgraph_t *kghp = &kdftgh;
+    dftgraph_t *kghp = &kdftgh; // 全局变量
 
     // 初始化图形数据结构, 里面放有图形模式、分辨率、图形驱动函数指针
     init_dftgraph();
@@ -21,6 +21,15 @@ PUBLIC LKINIT void init_bdvideo()
 
     // 初始vbe图形显卡的函数指针
     init_vbe();
+
+    if (kghp->gh_mode == BGAMODE)
+    {
+        kprint("BGAMODE\n");
+    }
+    else if (kghp->gh_mode == VBEMODE)
+    {
+        kprint("VBEMODE\n");
+    }
 
     // 清空屏幕 为黑色
     fill_graph(kghp, BGRA(0, 0, 0));
@@ -283,7 +292,6 @@ void write_pixcolor(dftgraph_t *kghp, u32_t x, u32_t y, pixl_t pix)
 
 void drxw_pixcolor(dftgraph_t *kghp, u32_t x, u32_t y, pixl_t pix)
 {
-
     kghp->gh_opfun.dgo_dxwritepix(kghp, pix, x, y);
     return;
 }

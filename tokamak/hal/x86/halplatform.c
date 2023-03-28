@@ -36,13 +36,13 @@ void init_machbstart()
 // 将地址转换为虚拟地址
 adr_t phyadr_to_viradr(adr_t kphyadr)
 {
-    if (kphyadr >= KRNL_MAP_PHYADDRESS_END)
+    if (kphyadr >= KRNL_MAP_PHYADDRESS_END) // 0x400000000
     {
         system_error("phyadr_to_viradr err\n");
-        return KRNL_ADDR_ERROR;
+        return KRNL_ADDR_ERROR; // 0xf800000000000
     }
 
-    return kphyadr + KRNL_MAP_VIRTADDRESS_START;
+    return kphyadr + KRNL_MAP_VIRTADDRESS_START; // 0xffff800000000000
 }
 
 adr_t viradr_to_phyadr(adr_t kviradr)

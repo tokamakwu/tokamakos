@@ -7,7 +7,7 @@
 
 void hal_start()
 {
-    init_hal();
+    init_hal(); // halinit.c 中;
 
     // 在 kernel/krlinit.c
     init_krl();
