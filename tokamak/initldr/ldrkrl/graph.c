@@ -36,7 +36,8 @@ void bmp_print(void *bmfile, machbstart_t *mbsp)
     int k = 0;
     // TODO: 为什么这么计算: (宽 * 24 + 31) / 8 取整数部分
     int ilinebc = (((binfp->bi_w * 24) + 31) >> 5) << 2;
-    // TODO: 循环为什么从 639开始, y 循环 510 次; 难道是因为图片是这么大吗
+    // TODO: 循环为什么从 639开始, y 循环 510 次; 难道是因为图片是这么大吗? 是的
+    // 改变x, y的值, 可以修改图片的显示位置
     for (int y = 639; y >= 129; y--, l++)
     {
         k = 0;
@@ -75,8 +76,8 @@ void init_graph(machbstart_t *mbsp)
     graph_t_init(&mbsp->mb_ghparm);
 
     // 获取VBE模式, 通过BIOS中断
-    init_bgadevice(mbsp); // TODO: 已经设置gh_mode = BGAMODE, 这个if语句不会执行呀? 迷惑
-    if (mbsp->mb_ghparm.gh_mode != BGAMODE)  // #define BGAMODE 3
+    init_bgadevice(mbsp);                   // TODO: 已经设置gh_mode = BGAMODE, 这个if语句不会执行呀? 迷惑
+    if (mbsp->mb_ghparm.gh_mode != BGAMODE) // #define BGAMODE 3
     {
         // 获取VBE模式, 通过BIOS中断
         get_vbemode(mbsp);
@@ -121,7 +122,7 @@ u32_t vfartolineadr(u32_t vfar)
 void get_vbemode(machbstart_t *mbsp)
 {
     realadr_call_entry(RLINTNR(2), 0, 0);
-    //#define VBEINFO_ADR 0x6000
+    // #define VBEINFO_ADR 0x6000
     vbeinfo_t *vbeinfoptr = (vbeinfo_t *)VBEINFO_ADR;
     u16_t *mnm;
 
@@ -165,9 +166,9 @@ void get_vbemode(machbstart_t *mbsp)
     {
         kerror("getvbemode not 118");
     }
-    mbsp->mb_ghparm.gh_mode = VBEMODE;  // #define VBEMODE 1
+    mbsp->mb_ghparm.gh_mode = VBEMODE; // #define VBEMODE 1
     mbsp->mb_ghparm.gh_vbemodenr = 0x118;
-    mbsp->mb_ghparm.gh_vifphyadr = VBEINFO_ADR;  //#define VBEINFO_ADR 0x6000
+    mbsp->mb_ghparm.gh_vifphyadr = VBEINFO_ADR; // #define VBEINFO_ADR 0x6000
     m2mcopy(vbeinfoptr, &mbsp->mb_ghparm.gh_vbeinfo, sizeof(vbeinfo_t));
     return;
 }
@@ -236,14 +237,14 @@ u32_t chk_bgamaxver()
         return (u32_t)BGA_DEV_ID2;
     }
 
-    //#define BGA_DEV_ID1 (0xB0C1) //- virtual width and height, X and Y offset0
+    // #define BGA_DEV_ID1 (0xB0C1) //- virtual width and height, X and Y offset0
     bga_write_reg(VBE_DISPI_INDEX_ID, BGA_DEV_ID1);
     if (bga_read_reg(VBE_DISPI_INDEX_ID) == BGA_DEV_ID1)
     {
         return (u32_t)BGA_DEV_ID1;
     }
 
-    //#define BGA_DEV_ID0 (0xB0C0) //- setting X and Y resolution and bit depth (8 BPP only), banked mode
+    // #define BGA_DEV_ID0 (0xB0C0) //- setting X and Y resolution and bit depth (8 BPP only), banked mode
     bga_write_reg(VBE_DISPI_INDEX_ID, BGA_DEV_ID0);
     if (bga_read_reg(VBE_DISPI_INDEX_ID) == BGA_DEV_ID0)
     {
@@ -268,22 +269,22 @@ void init_bgadevice(machbstart_t *mbsp)
     }
 
     // bga_write_reg, bga_read_reg 操作: 端口号索引通过 0x01CE 进行, 数据写入通过端口 0x01CF
-    //#define VBE_DISPI_INDEX_ENABLE (4), #define VBE_DISPI_DISABLED (0x00)
+    // #define VBE_DISPI_INDEX_ENABLE (4), #define VBE_DISPI_DISABLED (0x00)
     bga_write_reg(VBE_DISPI_INDEX_ENABLE, VBE_DISPI_DISABLED); // 可解读为: 通过0x1ce选择4号寄存器, 设置其值为0
 
-    //#define VBE_DISPI_INDEX_XRES (1)
+    // #define VBE_DISPI_INDEX_XRES (1)
     bga_write_reg(VBE_DISPI_INDEX_XRES, 1024);
 
-    //#define VBE_DISPI_INDEX_YRES (2)
+    // #define VBE_DISPI_INDEX_YRES (2)
     bga_write_reg(VBE_DISPI_INDEX_YRES, 768);
 
-    //#define VBE_DISPI_INDEX_BPP (3)
+    // #define VBE_DISPI_INDEX_BPP (3)
     bga_write_reg(VBE_DISPI_INDEX_BPP, 0x20);
 
-    //#define VBE_DISPI_ENABLED (0x01), #define VBE_DISPI_LFB_ENABLED (0x40)
+    // #define VBE_DISPI_ENABLED (0x01), #define VBE_DISPI_LFB_ENABLED (0x40)
     bga_write_reg(VBE_DISPI_INDEX_ENABLE, VBE_DISPI_ENABLED | (VBE_DISPI_LFB_ENABLED));
 
-    mbsp->mb_ghparm.gh_mode = BGAMODE; //#define BGAMODE 3
+    mbsp->mb_ghparm.gh_mode = BGAMODE; // #define BGAMODE 3
     mbsp->mb_ghparm.gh_vbemodenr = retdevid;
     mbsp->mb_ghparm.gh_x = 1024;
     mbsp->mb_ghparm.gh_y = 768;
@@ -293,7 +294,7 @@ void init_bgadevice(machbstart_t *mbsp)
     mbsp->mb_ghparm.gh_curdipbnk = 0;
     mbsp->mb_ghparm.gh_nextbnk = 0;
 
-    //TODO: gh_x * gh_x * 4 不应该是 gh_x * gh_y * 4 吗
+    // TODO: gh_x * gh_x * 4 不应该是 gh_x * gh_y * 4 吗
     mbsp->mb_ghparm.gh_banksz = (mbsp->mb_ghparm.gh_x * mbsp->mb_ghparm.gh_x * 4);
     // test_bga();
     return;
@@ -347,7 +348,7 @@ void test_bga()
 void get_vbemodeinfo(machbstart_t *mbsp)
 {
     realadr_call_entry(RLINTNR(3), 0, 0);
-    vbeominfo_t *vomif = (vbeominfo_t *)VBEMINFO_ADR;  // #define VBEINFO_ADR 0x6400
+    vbeominfo_t *vomif = (vbeominfo_t *)VBEMINFO_ADR; // #define VBEINFO_ADR 0x6400
     u32_t x = vomif->XResolution, y = vomif->YResolution;
     u32_t *phybass = (u32_t *)(vomif->PhysBasePtr);
 

@@ -22,15 +22,6 @@ PUBLIC LKINIT void init_bdvideo()
     // 初始vbe图形显卡的函数指针
     init_vbe();
 
-    if (kghp->gh_mode == BGAMODE)
-    {
-        kprint("BGAMODE\n");
-    }
-    else if (kghp->gh_mode == VBEMODE)
-    {
-        kprint("VBEMODE\n");
-    }
-
     // 清空屏幕 为黑色
     fill_graph(kghp, BGRA(0, 0, 0));
 
@@ -97,12 +88,12 @@ void set_charsdxwflush(u64_t chardxw, u64_t flush)
 
 void hal_dspversion()
 {
-    pixl_t bkpx = set_deffontpx(BGRA(0xff, 0, 0));
+    pixl_t bkpx = set_deffontpx(BGRA(0xff, 0xff, 0));
     kprint(cosmos_version);
 
-    kprint("系统处理器工作模式:%d位 系统物理内存大小:%dMB\nBitsPerPixel:0x%x\n",
+    kprint("系统处理器工作模式:%d位 系统物理内存大小:%dMB\nBitsPerPixel:0x%x, Mode=%d\n",
            (uint_t)kmachbsp.mb_cpumode, (uint_t)(kmachbsp.mb_memsz >> 20),
-           (uint_t)kmachbsp.mb_ghparm.gh_onepixbits);
+           (uint_t)kmachbsp.mb_ghparm.gh_onepixbits, (uint_t)kmachbsp.mb_ghparm.gh_mode);
     set_deffontpx(bkpx);
     return;
 }
